@@ -51,9 +51,9 @@ Copia `.env.example` a `.env` en la raíz del repo. En Colab, los notebooks leen
 estos mismos nombres desde el panel 🔑 **Secrets**.
 
 ```bash
-LLM_BASE_URL="https://api.mistral.ai/v1"
+LLM_BASE_URL="https://api.groq.com/openai/v1"
 LLM_API_KEY="tu_key"
-LLM_MODEL="mistral-small-latest"
+LLM_MODEL="llama-3.3-70b-versatile"
 ```
 
 ### Configuración para LangChain
@@ -61,7 +61,7 @@ LLM_MODEL="mistral-small-latest"
 llm = ChatOpenAI(
     base_url=os.getenv("LLM_BASE_URL"),
     api_key=os.getenv("LLM_API_KEY"),
-    model=os.getenv("LLM_MODEL", "mistral-small-latest"),
+    model=os.getenv("LLM_MODEL", "llama-3.3-70b-versatile"),
     temperature=0,
 )
 ```
@@ -74,7 +74,7 @@ llm = ChatOpenAI(
 from crewai import LLM
 
 llm = LLM(
-    model="openai/" + os.getenv("LLM_MODEL", "mistral-small-latest"),
+    model="openai/" + os.getenv("LLM_MODEL", "llama-3.3-70b-versatile"),
     base_url=os.getenv("LLM_BASE_URL"),
     api_key=os.getenv("LLM_API_KEY"),
     temperature=0,

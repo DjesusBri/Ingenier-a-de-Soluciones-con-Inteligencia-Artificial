@@ -132,7 +132,7 @@ crew = Crew(
 # SOLUCIÓN: Mapear variables de entorno
 os.environ["OPENAI_API_BASE"] = os.environ.get("OPENAI_BASE_URL", "")
 llm = LLM(
-    model="openai/" + os.getenv("LLM_MODEL", "mistral-small-latest"),
+    model="openai/" + os.getenv("LLM_MODEL", "llama-3.3-70b-versatile"),
     base_url=os.getenv("LLM_BASE_URL"),
     api_key=os.getenv("LLM_API_KEY"),
 )
@@ -168,9 +168,9 @@ llm = LLM(
 
 **Variables de entorno requeridas**:
 ```bash
-LLM_BASE_URL="https://api.mistral.ai/v1"
+LLM_BASE_URL="https://api.groq.com/openai/v1"
 LLM_API_KEY="tu_key"
-LLM_MODEL="mistral-small-latest"
+LLM_MODEL="llama-3.3-70b-versatile"
 ```
 
 **Patrón de mapeo para compatibilidad**:
@@ -179,14 +179,14 @@ LLM_MODEL="mistral-small-latest"
 llm = ChatOpenAI(
     base_url=os.getenv("LLM_BASE_URL"),
     api_key=os.getenv("LLM_API_KEY"),
-    model=os.getenv("LLM_MODEL", "mistral-small-latest"),
+    model=os.getenv("LLM_MODEL", "llama-3.3-70b-versatile"),
     temperature=0,
 )
 
 # Para CrewAI (requiere mapeo)
 os.environ["OPENAI_API_BASE"] = os.environ.get("OPENAI_BASE_URL", "")
 llm = LLM(
-    model="openai/" + os.getenv("LLM_MODEL", "mistral-small-latest"),
+    model="openai/" + os.getenv("LLM_MODEL", "llama-3.3-70b-versatile"),
     base_url=os.getenv("LLM_BASE_URL"),
     api_key=os.getenv("LLM_API_KEY"),
 )

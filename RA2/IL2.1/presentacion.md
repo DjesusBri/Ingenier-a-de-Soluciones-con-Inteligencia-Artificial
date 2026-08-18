@@ -5,7 +5,7 @@
 - Dominar el ciclo de razonamiento ReAct (Reason + Act) y el Function Calling nativo.
 - Aprender a construir agentes usando frameworks LangChain y CrewAI.
 - Implementar equipos de agentes colaborativos para tareas complejas.
-- Entender las configuraciones específicas para integrar frameworks con GitHub Models API.
+- Entender cómo se configura el proveedor de LLM en cada framework (LangChain y CrewAI).
 
 ## 1. ¿Qué es un Agente Inteligente?
 
@@ -59,7 +59,7 @@ La progresión natural lleva a frameworks que abstraen esta complejidad y propor
 
 ### Implementación Simplificada:
 ```python
-from langchain.agents import initialize_agent, Tool
+from langchain_classic.agents import initialize_agent, Tool  # LangChain v1: langchain.agents.create_agent
 
 # Definir herramientas con decorador simple
 @tool
@@ -77,8 +77,17 @@ agent = initialize_agent(
 result = agent.run("¿Quién fue Marie Curie?")
 ```
 
-**Configuración Específica para GitHub Models API**:
-CrewAI no usa LangChain: por debajo usa LiteLLM, con su propia clase `LLM`, a la que hay que pasarle explícitamente `model`, `base_url` y `api_key`.
+**Configuración del proveedor en LangChain**:
+`ChatOpenAI` recibe el proveedor de forma explícita, leyendo las variables `LLM_*` del entorno:
+
+```python
+llm = ChatOpenAI(
+    base_url=os.getenv("LLM_BASE_URL"),
+    api_key=os.getenv("LLM_API_KEY"),
+    model=os.getenv("LLM_MODEL", "mistral-small-latest"),
+    temperature=0,
+)
+```
 
 ## 4. CrewAI: Orquestación de Equipos de Agentes
 
@@ -126,22 +135,23 @@ crew = Crew(
 )
 ```
 
-### Configuración Crítica para GitHub Models API:
-**Problema identificado**: CrewAI utiliza LangChain internamente, requiriendo mapeo específico de variables:
+### Configuración Crítica del Proveedor:
+**Punto clave**: CrewAI **no** usa LangChain por debajo, sino LiteLLM, con su propia
+clase `LLM`. El prefijo `openai/` le indica que hable el protocolo de OpenAI contra
+nuestro `base_url`, lo que permite usar cualquier proveedor compatible:
 ```python
-# SOLUCIÓN: Mapear variables de entorno
-os.environ["OPENAI_API_BASE"] = os.environ.get("OPENAI_BASE_URL", "")
 llm = LLM(
-    model="openai/" + os.getenv("LLM_MODEL", "llama-3.3-70b-versatile"),
+    model="openai/" + os.getenv("LLM_MODEL", "mistral-small-latest"),
     base_url=os.getenv("LLM_BASE_URL"),
     api_key=os.getenv("LLM_API_KEY"),
 )
 ```
 
 **Errores comunes corregidos**:
-1. **Herramientas**: Usar `BaseTool` de `crewai_tools`, no `@tool` de LangChain.
+1. **Herramientas**: Usar `BaseTool`, que en CrewAI 1.x se importa desde `crewai.tools` (antes `crewai_tools`).
 2. **Parámetro verbose**: `verbose=True` (boolean), no `verbose=2` (entero).
-3. **Configuración LLM**: Usar mapeo de variables, no parámetros explícitos.
+3. **Configuración LLM**: Pasar `model`, `base_url` y `api_key` explícitos a `crewai.LLM`; no basta con variables de entorno.
+4. **Ejecución en notebook**: usar `await crew.kickoff_async()`; `crew.kickoff()` falla dentro del event loop de Jupyter.
 
 ## 5. Comparación y Criterios de Selección
 
@@ -168,9 +178,9 @@ llm = LLM(
 
 **Variables de entorno requeridas**:
 ```bash
-LLM_BASE_URL="https://api.groq.com/openai/v1"
+LLM_BASE_URL="https://api.mistral.ai/v1"
 LLM_API_KEY="tu_key"
-LLM_MODEL="llama-3.3-70b-versatile"
+LLM_MODEL="mistral-small-latest"
 ```
 
 **Patrón de mapeo para compatibilidad**:
@@ -179,14 +189,14 @@ LLM_MODEL="llama-3.3-70b-versatile"
 llm = ChatOpenAI(
     base_url=os.getenv("LLM_BASE_URL"),
     api_key=os.getenv("LLM_API_KEY"),
-    model=os.getenv("LLM_MODEL", "llama-3.3-70b-versatile"),
+    model=os.getenv("LLM_MODEL", "mistral-small-latest"),
     temperature=0,
 )
 
 # Para CrewAI (requiere mapeo)
 os.environ["OPENAI_API_BASE"] = os.environ.get("OPENAI_BASE_URL", "")
 llm = LLM(
-    model="openai/" + os.getenv("LLM_MODEL", "llama-3.3-70b-versatile"),
+    model="openai/" + os.getenv("LLM_MODEL", "mistral-small-latest"),
     base_url=os.getenv("LLM_BASE_URL"),
     api_key=os.getenv("LLM_API_KEY"),
 )
@@ -198,7 +208,7 @@ llm = LLM(
 1. **Fundamentos**: Agente básico desde cero con ciclo ReAct manual.
 2. **Function Calling**: Agente usando mecanismo nativo de OpenAI con JSON Schema.
 3. **LangChain**: Agente individual con herramientas de Wikipedia, configuración simplificada.
-4. **CrewAI**: Equipo investigador-escritor con configuración corregida para GitHub Models API.
+4. **CrewAI**: Equipo investigador-escritor con el proveedor configurado vía `crewai.LLM`.
 
 ### Patrones Arquitectónicos Implementados:
 - **Monolítico**: Agente básico con toda la lógica en una función.
@@ -206,7 +216,7 @@ llm = LLM(
 - **Colaborativo**: Múltiples agentes especializados con tareas interdependientes.
 
 ### Configuración de Troubleshooting:
-El módulo incluye documentación detallada de errores comunes y sus soluciones, especialmente para la integración de frameworks con GitHub Models API.
+El módulo incluye documentación detallada de errores comunes y sus soluciones, especialmente para la integración de frameworks con los proveedores compatibles con OpenAI.
 
 ### Preparación para IL2.2:
 - **Memory Systems**: Sistemas de memoria avanzados para agentes persistentes.

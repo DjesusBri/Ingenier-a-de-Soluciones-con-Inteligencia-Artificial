@@ -19,7 +19,7 @@
 - **Arquitectura:** Basados en Transformers
 - **Funcionamiento:** Predicción de tokens basada en contexto
 - **Capacidades:** Generación, comprensión y análisis de texto
-- **Proveedores principales:** OpenAI, GitHub Models, Anthropic, Google
+- **Proveedores principales:** Groq, Mistral, OpenAI, Anthropic, Google
 
 **Conceptos clave:**
 - Tokens, embeddings, atención
@@ -32,8 +32,8 @@
 
 **Variables de entorno requeridas** (archivo `.env` en la raíz):
 ```bash
-LLM_BASE_URL="https://api.groq.com/openai/v1"
-LLM_API_KEY="gsk_..."          # gratis en console.groq.com/keys
+LLM_BASE_URL="https://api.mistral.ai/v1"
+LLM_API_KEY="tu_key_de_mistral"          # gratis en console.mistral.ai/api-keys
 GOOGLE_API_KEY="AIza..."       # gratis en aistudio.google.com/apikey (solo embeddings)
 ```
 
@@ -88,7 +88,7 @@ client = OpenAI(
 llm = ChatOpenAI(
     base_url=os.getenv("LLM_BASE_URL"),
     api_key=os.getenv("LLM_API_KEY"),
-    model="llama-3.3-70b-versatile"
+    model="mistral-small-latest"
 )
 ```
 
@@ -179,7 +179,7 @@ for chunk in llm.stream([HumanMessage(content=prompt)]):
 
 **Recursos adicionales:**
 - [Documentación OpenAI API](https://platform.openai.com/docs)
-- [GitHub Models Documentation](https://docs.github.com/en/github-models)
+- [Documentación de Groq](https://console.groq.com/docs/models)
 - [LangChain Documentation](https://python.langchain.com/docs/)
 - [Transformer Architecture Paper](https://arxiv.org/abs/1706.03762)
 

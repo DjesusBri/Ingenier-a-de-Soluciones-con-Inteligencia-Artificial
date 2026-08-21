@@ -62,7 +62,7 @@ No necesitas instalar nada en tu computador. **Todo corre en Colab con servicios
 
 | Key | Para qué | Dónde obtenerla |
 |---|---|---|
-| `LLM_API_KEY` | Chat (todos los módulos) | [console.groq.com/keys](https://console.groq.com/keys) |
+| `LLM_API_KEY` | Chat (todos los módulos) | [console.mistrail.ai/api-keys](https://console.mistrail.ai/api-keys) |
 | `GOOGLE_API_KEY` | Embeddings (RA1/IL1.3 y IL1.4) | [aistudio.google.com/apikey](https://aistudio.google.com/apikey) |
 
 Para la de Google basta la misma cuenta con la que entras a Colab.
@@ -92,7 +92,7 @@ es el nombre que buscan los notebooks:
 
 | Name (exacto) | Value | ¿Obligatorio? | Se usa en |
 |---|---|---|---|
-| `LLM_API_KEY` | tu key de Groq | **Sí** | Todos los notebooks |
+| `LLM_API_KEY` | tu key de Mistrail | **Sí** | Todos los notebooks |
 | `GOOGLE_API_KEY` | tu key de Google AI Studio | **Sí, desde IL1.3** | RA1/IL1.3 y RA1/IL1.4 (embeddings) |
 | `LANGSMITH_API_KEY` | tu key de LangSmith | No, opcional | RA1/IL1.4 (`2-langsmith-evaluation.ipynb`) |
 

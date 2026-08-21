@@ -92,9 +92,9 @@ es el nombre que buscan los notebooks:
 
 | Name (exacto) | Value | ¿Obligatorio? | Se usa en |
 |---|---|---|---|
-| `LLM_API_KEY` | tu key de Mistrail | **Sí** | Todos los notebooks |
-| `GOOGLE_API_KEY` | tu key de Google AI Studio | **Sí, desde IL1.3** | RA1/IL1.3 y RA1/IL1.4 (embeddings) |
-| `LANGSMITH_API_KEY` | tu key de LangSmith | No, opcional | RA1/IL1.4 (`2-langsmith-evaluation.ipynb`) |
+| `LLM_API_KEY` | Tu key de Mistrail | **Sí** | Todos los notebooks |
+| `GOOGLE_API_KEY` | Tu key de Google AI Studio | **Sí, desde IL1.3** | RA1/IL1.3 y RA1/IL1.4 (embeddings) |
+| `LANGSMITH_API_KEY` | Tu key de LangSmith | No, opcional | RA1/IL1.4 (`2-langsmith-evaluation.ipynb`) |
 
 > ⚠️ **Activa el interruptor "Notebook access" en cada secreto.** Si el secreto existe pero
 > el interruptor está apagado, el notebook no puede leerlo y la variable queda vacía, con un
@@ -108,9 +108,6 @@ valor: editar sobre el texto existente suele dejar restos del valor anterior y p
 `401 Invalid API Key` difícil de diagnosticar.
 
 #### Cambiar de proveedor desde Colab (opcional)
-
-Si te quedas sin cuota diaria de Groq, puedes cambiar de proveedor **sin tocar el código**,
-agregando estos secretos adicionales. Si no los defines, todo sigue funcionando con Groq:
 
 | Name (exacto) | Value para usar Mistral |
 |---|---|

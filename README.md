@@ -62,13 +62,16 @@ No necesitas instalar nada en tu computador. **Todo corre en Colab con servicios
 
 | Key | Para qué | Dónde obtenerla |
 |---|---|---|
-| `LLM_API_KEY` | Chat (todos los módulos) | [console.mistrail.ai/api-keys](https://console.mistrail.ai/api-keys) |
+| `LLM_API_KEY` | Chat (todos los módulos) | [console.mistral.ai/api-keys](https://console.mistral.ai/api-keys) |
 | `GOOGLE_API_KEY` | Embeddings (RA1/IL1.3 y IL1.4) | [aistudio.google.com/apikey](https://aistudio.google.com/apikey) |
 
 Para la de Google basta la misma cuenta con la que entras a Colab.
 
-> **¿Por qué dos proveedores?** Groq no ofrece endpoint de embeddings, así que la parte
-> de RAG vectorial usa Gemini (`gemini-embedding-001`) mientras el chat sigue en Groq.
+> **¿Por qué dos proveedores?** Mistral se encarga del chat, pero la parte de RAG
+> vectorial usa Gemini (`gemini-embedding-001`) para los embeddings. Son servicios
+> distintos y ningún proveedor gratuito cubre bien los dos.
+>
+> La key de Mistral pide verificar un número de teléfono una sola vez.
 
 ### Paso 2 — Haz un fork de este repositorio
 
@@ -92,7 +95,7 @@ es el nombre que buscan los notebooks:
 
 | Name (exacto) | Value | ¿Obligatorio? | Se usa en |
 |---|---|---|---|
-| `LLM_API_KEY` | Tu key de Mistrail | **Sí** | Todos los notebooks |
+| `LLM_API_KEY` | Tu key de Mistral | **Sí** | Todos los notebooks |
 | `GOOGLE_API_KEY` | Tu key de Google AI Studio | **Sí, desde IL1.3** | RA1/IL1.3 y RA1/IL1.4 (embeddings) |
 | `LANGSMITH_API_KEY` | Tu key de LangSmith | No, opcional | RA1/IL1.4 (`2-langsmith-evaluation.ipynb`) |
 
@@ -109,15 +112,23 @@ valor: editar sobre el texto existente suele dejar restos del valor anterior y p
 
 #### Cambiar de proveedor desde Colab (opcional)
 
-| Name (exacto) | Value para usar Mistral |
-|---|---|
-| `LLM_BASE_URL` | `https://api.mistral.ai/v1` |
-| `LLM_MODEL` | `mistral-small-latest` |
-| `LLM_MODEL_SMALL` | `ministral-8b-latest` |
+Si te quedas sin cuota de Mistral, puedes cambiar de proveedor **sin tocar el código**,
+agregando estos secretos adicionales. Si no los defines, todo sigue funcionando con Mistral:
 
-Y en `LLM_API_KEY` pon tu key de Mistral ([console.mistral.ai/api-keys](https://console.mistral.ai/api-keys),
+| Name (exacto) | Value para usar Groq |
+|---|---|
+| `LLM_BASE_URL` | `https://api.groq.com/openai/v1` |
+| `LLM_MODEL` | `openai/gpt-oss-120b` |
+| `LLM_MODEL_SMALL` | `openai/gpt-oss-20b` |
+
+Y en `LLM_API_KEY` pon tu key de Groq ([console.groq.com/keys](https://console.groq.com/keys),
 gratuita). Los embeddings siguen usando Gemini en cualquier caso, así que `GOOGLE_API_KEY`
 no cambia.
+
+> ⚠️ **Sobre Groq:** retiró los modelos Llama de su catálogo gratuito. Lo que queda son
+> modelos de razonamiento, que gastan parte del presupuesto de `max_tokens` en razonamiento
+> interno que no ves: con valores muy bajos (≤10) devuelven una respuesta vacía. Los
+> ejercicios ya usan valores seguros, pero tenlo en cuenta si experimentas con ese parámetro.
 
 > Cualquier proveedor con API compatible con OpenAI sirve: basta apuntar `LLM_BASE_URL`
 > a su endpoint y poner un `LLM_MODEL` que ese proveedor reconozca.
@@ -134,8 +145,8 @@ Las cuotas son **por cuenta**, así que cada quien tiene la suya. Los valores re
 
 | Servicio | Modelo | Límite diario | Límite por minuto |
 |---|---|---|---|
-| Groq | `llama-3.3-70b-versatile` | 100.000 tokens · 1.000 peticiones | 12.000 tokens · 30 peticiones |
-| Groq | `llama-3.1-8b-instant` | 500.000 tokens · 14.400 peticiones | 6.000 tokens · 30 peticiones |
+| Mistral | `mistral-small-latest` | plan gratuito, sin coste | según el plan |
+| Groq | `openai/gpt-oss-120b` | 100.000 tokens · 1.000 peticiones | 12.000 tokens · 30 peticiones |
 | Gemini | `gemini-embedding-001` | 1.000 peticiones | 100 peticiones |
 
 Una pasada completa por los notebooks de RA1 consume del orden de **30.000 tokens**, así que
@@ -143,8 +154,8 @@ el límite diario da para unas tres corridas completas. Si te aparece un error `
 `rate_limit_exceeded`, no está roto tu código: agotaste la cuota. El mensaje de error indica
 cuántos segundos esperar, y la cuota se va liberando de a poco.
 
-**Truco:** si estás iterando mucho sobre un ejercicio, cambia temporalmente a
-`llama-3.1-8b-instant`, que tiene cinco veces más presupuesto diario de tokens.
+**Truco:** si estás iterando mucho sobre un ejercicio, usa `LLM_MODEL_SMALL`
+(`ministral-8b-latest`), que es más rápido y barato en tokens que el modelo principal.
 
 ---
 
@@ -156,8 +167,8 @@ El mensaje de error dice exactamente qué revisar:
 |---|---|---|
 | `Connection error.` | No se alcanza el servidor: red, firewall o proxy | Ver abajo |
 | `401` / `Missing credentials` | La key no llegó al notebook | Revisa los Secrets de Colab (con "Notebook access" activado) o tu `.env` |
-| `429 rate_limit_exceeded` | Agotaste la cuota gratuita | Espera los segundos que indica el error, o cambia a `llama-3.1-8b-instant` |
-| `404` | El `base_url` apunta a un endpoint equivocado | Confirma que `LLM_BASE_URL` sea `https://api.groq.com/openai/v1` |
+| `429 rate_limit_exceeded` | Agotaste la cuota gratuita | Espera los segundos que indica el error, o cambia a `LLM_MODEL_SMALL` |
+| `404` | El modelo no existe en ese proveedor, o el `base_url` está equivocado | Comprueba que `LLM_MODEL` exista en el proveedor y que `LLM_BASE_URL` corresponda |
 | `ModuleNotFoundError` | Falta instalar dependencias | Ejecuta la primera celda del notebook (o `pip install -r requirements.txt` en local) |
 
 ### Diagnóstico de `Connection error.`
@@ -204,7 +215,7 @@ Luego copia `.env.example` a `.env` y completa `LLM_API_KEY` y `GOOGLE_API_KEY`
 (mismas keys del Paso 1). Los notebooks detectan si están en Colab o en local y
 leen las credenciales del lugar correcto sin que cambies nada.
 
-`LLM_BASE_URL` ya viene configurado apuntando a Groq, que expone una API compatible con OpenAI.
+`LLM_BASE_URL` ya viene configurado apuntando a Mistral, que expone una API compatible con OpenAI.
 `LANGSMITH_API_KEY` es opcional y solo la necesita `RA1/IL1.4/2-langsmith-evaluation.ipynb`
 (gratis en [smith.langchain.com](https://smith.langchain.com/settings)).
 

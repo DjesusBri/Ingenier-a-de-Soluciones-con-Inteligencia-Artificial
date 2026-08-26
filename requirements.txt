@@ -25,7 +25,6 @@ tiktoken>=0.8
 
 # --- Agentes multi-agente (RA2) ---------------------------------------
 crewai>=1.15                    # exige Python <3.14
-crewai-tools>=1.0
 wikipedia>=1.4                  # herramienta de ejemplo para los agentes
 
 # --- Evaluación y observabilidad --------------------------------------

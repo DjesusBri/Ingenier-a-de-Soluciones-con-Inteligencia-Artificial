@@ -12,3 +12,4 @@ GEMINI.md
 # Artefactos generados al ejecutar los ejemplos
 agent.log
 *.log
+.runner.py

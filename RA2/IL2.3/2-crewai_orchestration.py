@@ -16,7 +16,7 @@ from crewai import LLM, Agent, Task, Crew
 # protocolo de OpenAI contra el `base_url` que le pasamos, lo que permite usar
 # cualquier proveedor compatible (Groq, Mistral, etc.) sin cambiar el código.
 llm = LLM(
-    model="openai/" + os.getenv("LLM_MODEL", "llama-3.3-70b-versatile"),
+    model="openai/" + os.getenv("LLM_MODEL", "mistral-small-latest"),
     base_url=os.getenv("LLM_BASE_URL"),
     api_key=os.getenv("LLM_API_KEY"),
     temperature=0,

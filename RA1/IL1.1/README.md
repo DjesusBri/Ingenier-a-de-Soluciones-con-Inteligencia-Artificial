@@ -88,7 +88,7 @@ Copia `.env.example` a `.env` en la raíz del repo y completa:
 
 ```bash
 LLM_BASE_URL="https://api.mistral.ai/v1"   # Groq, API compatible con OpenAI
-LLM_API_KEY="tu_key_de_mistral"                            # https://console.mistral.ai/api-keys
+LLM_API_KEY="gsk_..."                            # https://console.mistral.ai/api-keys
 ```
 
 Los notebooks cargan el `.env` automáticamente (y en Google Colab leen el panel 🔑 **Secrets**).

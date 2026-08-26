@@ -28,12 +28,12 @@ except ImportError:
 # Chat  -> Groq   (API compatible con OpenAI)
 # Embed -> Gemini (Groq no expone endpoint de embeddings)
 llm_api_key = os.getenv("LLM_API_KEY")
-llm_base_url = os.getenv("LLM_BASE_URL", "https://api.groq.com/openai/v1")
+llm_base_url = os.getenv("LLM_BASE_URL", "https://api.mistral.ai/v1")
 google_api_key = os.getenv("GOOGLE_API_KEY")
 
 if not llm_api_key:
     st.error("❌ Falta LLM_API_KEY (key de Groq). Revisa tu archivo .env.")
-    st.info("💡 Consíguela gratis en https://console.groq.com/keys")
+    st.info("💡 Consíguela gratis en https://console.mistral.ai/api-keys")
     st.stop()
 
 if not google_api_key:
@@ -111,10 +111,10 @@ Responde SOLO con el número:"""
 
     try:
         result = client.chat.completions.create(
-            model=os.getenv("LLM_MODEL", "llama-3.3-70b-versatile"),
+            model=os.getenv("LLM_MODEL", "mistral-small-latest"),
             messages=[{"role": "user", "content": eval_prompt}],
             temperature=0.1,
-            max_tokens=10
+            max_tokens=150
         )
         return float(result.choices[0].message.content.strip())
     except:
@@ -140,10 +140,10 @@ Responde SOLO con el número:"""
 
     try:
         result = client.chat.completions.create(
-            model=os.getenv("LLM_MODEL", "llama-3.3-70b-versatile"),
+            model=os.getenv("LLM_MODEL", "mistral-small-latest"),
             messages=[{"role": "user", "content": eval_prompt}],
             temperature=0.1,
-            max_tokens=10
+            max_tokens=150
         )
         return float(result.choices[0].message.content.strip())
     except:
@@ -165,10 +165,10 @@ Responde SOLO 'SI' o 'NO':"""
         
         try:
             result = client.chat.completions.create(
-                model=os.getenv("LLM_MODEL", "llama-3.3-70b-versatile"),
+                model=os.getenv("LLM_MODEL", "mistral-small-latest"),
                 messages=[{"role": "user", "content": eval_prompt}],
                 temperature=0.1,
-                max_tokens=5
+                max_tokens=150
             )
             if result.choices[0].message.content.strip().upper() == 'SI':
                 relevant_count += 1
@@ -229,7 +229,7 @@ Responde basándote únicamente en el contexto proporcionado."""
 
     try:
         response = client.chat.completions.create(
-            model=os.getenv("LLM_MODEL", "llama-3.3-70b-versatile"),
+            model=os.getenv("LLM_MODEL", "mistral-small-latest"),
             messages=[{"role": "user", "content": prompt}],
             temperature=0.7,
             max_tokens=600

@@ -18,7 +18,7 @@ from langchain_openai import ChatOpenAI
 llm = ChatOpenAI(
     base_url=os.getenv("LLM_BASE_URL"),
     api_key=os.getenv("LLM_API_KEY"),
-    model=os.getenv("LLM_MODEL", "llama-3.3-70b-versatile"),
+    model=os.getenv("LLM_MODEL", "mistral-small-latest"),
     temperature=0,
 )
 

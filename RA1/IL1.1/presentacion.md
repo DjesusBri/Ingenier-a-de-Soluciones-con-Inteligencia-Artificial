@@ -33,7 +33,7 @@
 **Variables de entorno requeridas** (archivo `.env` en la raíz):
 ```bash
 LLM_BASE_URL="https://api.mistral.ai/v1"
-LLM_API_KEY="tu_key_de_mistral"          # gratis en console.mistral.ai/api-keys
+LLM_API_KEY="gsk_..."          # gratis en console.mistral.ai/api-keys
 GOOGLE_API_KEY="AIza..."       # gratis en aistudio.google.com/apikey (solo embeddings)
 ```
 

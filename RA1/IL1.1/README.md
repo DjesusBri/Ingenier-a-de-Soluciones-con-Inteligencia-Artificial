@@ -6,7 +6,7 @@ Esta unidad introduce los conceptos fundamentales de los Modelos de Lenguaje Gra
 
 ## Videos de cada archivo del curso:
 
-- **1-github_model_api.ipynb**: Conexión directa a la API (Groq, compatible con OpenAI).
+- **1-github_model_api.ipynb**: Conexión directa a la API (Mistral, compatible con OpenAI).
   [![Ver Video](https://img.youtube.com/vi/oYvwSROBTl0/hqdefault.jpg)](https://www.youtube.com/watch?v=oYvwSROBTl0)
 - **2-langchain_model_api.ipynb**: Abstracción de la API con LangChain.
   [![Ver Video](https://img.youtube.com/vi/v6Dgw0CMAfs/hqdefault.jpg)](https://www.youtube.com/watch?v=v6Dgw0CMAfs)
@@ -30,7 +30,7 @@ Al completar esta unidad, serás capaz de:
 Este módulo está compuesto por cuatro cuadernos de Jupyter que te guiarán progresivamente desde una conexión básica hasta la creación de un chatbot con memoria.
 
 ### Notebook 1: Conexión Directa a la API (`1-github_model_api.ipynb`)
-Este cuaderno es el punto de partida. Aprenderás a realizar llamadas directas a un modelo de lenguaje utilizando el cliente de OpenAI apuntado a Groq (que expone una API compatible con OpenAI).
+Este cuaderno es el punto de partida. Aprenderás a realizar llamadas directas a un modelo de lenguaje utilizando el cliente de OpenAI apuntado a Mistral (que expone una API compatible con OpenAI).
 - **Qué aprenderás**:
     - Configurar las variables de entorno y el cliente de `openai`.
     - Realizar una llamada básica `chat.completions.create`.
@@ -87,8 +87,8 @@ Un LLM no tiene estado. Este cuaderno enseña cómo darle "memoria" para que pue
 Copia `.env.example` a `.env` en la raíz del repo y completa:
 
 ```bash
-LLM_BASE_URL="https://api.mistral.ai/v1"   # Groq, API compatible con OpenAI
-LLM_API_KEY="gsk_..."                            # https://console.mistral.ai/api-keys
+LLM_BASE_URL="https://api.mistral.ai/v1"   # Mistral, API compatible con OpenAI
+LLM_API_KEY="tu_key_de_mistral"                  # https://console.mistral.ai/api-keys
 ```
 
 Los notebooks cargan el `.env` automáticamente (y en Google Colab leen el panel 🔑 **Secrets**).
@@ -153,7 +153,7 @@ Esta unidad incluye:
 ## Recursos Adicionales
 
 - [Documentación OpenAI API](https://platform.openai.com/docs)
-- [Documentación de Groq](https://console.groq.com/docs/models)
+- [Documentación de Mistral](https://docs.mistral.ai/getting-started/models/models_overview/)
 - [LangChain Documentation](https://python.langchain.com/docs/)
 - [Transformer Architecture Paper](https://arxiv.org/abs/1706.03762)
 

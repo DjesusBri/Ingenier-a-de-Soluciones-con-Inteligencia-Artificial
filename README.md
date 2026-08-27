@@ -145,14 +145,13 @@ Las cuotas son **por cuenta**, así que cada quien tiene la suya. Los valores re
 
 | Servicio | Modelo | Límite diario | Límite por minuto |
 |---|---|---|---|
-| Mistral | `mistral-small-latest` | plan gratuito, sin coste | según el plan |
+| Mistral | `mistral-small-latest` | plan gratuito, sin coste | 100.000 tokens · 100 peticiones |
 | Groq | `openai/gpt-oss-120b` | 100.000 tokens · 1.000 peticiones | 12.000 tokens · 30 peticiones |
 | Gemini | `gemini-embedding-001` | 1.000 peticiones | 100 peticiones |
 
-Una pasada completa por los notebooks de RA1 consume del orden de **30.000 tokens**, así que
-el límite diario da para unas tres corridas completas. Si te aparece un error `429`
-`rate_limit_exceeded`, no está roto tu código: agotaste la cuota. El mensaje de error indica
-cuántos segundos esperar, y la cuota se va liberando de a poco.
+El límite de Mistral es **por minuto, no por día**: si te aparece un error `429`, no está roto
+tu código ni te quedaste sin cuota para la clase. Espera unos segundos y vuelve a ejecutar la
+celda. Solo Groq, si lo usas como alternativa, tiene un tope diario que sí se puede agotar.
 
 **Truco:** si estás iterando mucho sobre un ejercicio, usa `LLM_MODEL_SMALL`
 (`ministral-8b-latest`), que es más rápido y barato en tokens que el modelo principal.
@@ -181,17 +180,17 @@ Pega esto en una celda para ubicar el punto exacto de la falla:
 import os, socket, httpx
 print("LLM_BASE_URL:", os.getenv("LLM_BASE_URL"))
 try:
-    print("DNS api.groq.com ->", socket.gethostbyname("api.groq.com"))
+    print("DNS api.mistral.ai ->", socket.gethostbyname("api.mistral.ai"))
 except Exception as e:
     print("DNS FALLA ->", e, "  (dominio bloqueado por la red)")
 try:
-    print("HTTPS ->", httpx.get("https://api.groq.com/openai/v1/models", timeout=15).status_code)
+    print("HTTPS ->", httpx.get("https://api.mistral.ai/v1/models", timeout=15).status_code)
 except Exception as e:
     print("HTTPS FALLA ->", type(e).__name__, "  (firewall o proxy)")
 ```
 
 - **Falla el DNS** → la red bloquea el dominio. Prueba con otra red (datos del celular)
-  o pide a TI que habilite `api.groq.com`.
+  o pide a TI que habilite `api.mistral.ai`.
 - **DNS bien pero falla HTTPS** → hay un proxy o firewall en medio.
 - **Ambos bien pero el notebook falla** → reinicia el entorno de ejecución y vuelve a
   correr las celdas desde la primera.

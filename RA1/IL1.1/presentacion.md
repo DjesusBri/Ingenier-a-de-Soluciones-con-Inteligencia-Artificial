@@ -33,7 +33,7 @@
 **Variables de entorno requeridas** (archivo `.env` en la raíz):
 ```bash
 LLM_BASE_URL="https://api.mistral.ai/v1"
-LLM_API_KEY="gsk_..."          # gratis en console.mistral.ai/api-keys
+LLM_API_KEY="tu_key_de_mistral"   # gratis en console.mistral.ai/api-keys
 GOOGLE_API_KEY="AIza..."       # gratis en aistudio.google.com/apikey (solo embeddings)
 ```
 
@@ -50,12 +50,12 @@ pip install -r requirements.txt
 ---
 
 ## Slide 4: Conexión Directa con API
-**Título:** Notebook 1 - Conexión directa con la API (Groq)
+**Título:** Notebook 1 - Conexión directa con la API (Mistral)
 
 **Pasos a seguir:**
 1. Preparar el entorno: instalar dependencias y cargar las credenciales
    (Secrets de Colab o archivo `.env`)
-2. Configurar el cliente `OpenAI` con `base_url` apuntando a Groq
+2. Configurar el cliente `OpenAI` con `base_url` apuntando a Mistral
 3. Realizar la primera llamada e interpretar la respuesta: contenido,
    modelo usado y consumo de tokens
 4. Definir el comportamiento del modelo con mensajes `system`
@@ -121,10 +121,13 @@ for chunk in llm.stream([HumanMessage(content=prompt)]):
 ## Slide 7: Gestión de Memoria
 **Título:** Notebook 4 - LangChain Memory
 
-**Tipos de memoria:**
-- **ConversationBufferMemory:** Mantiene todo el historial
-- **ConversationBufferWindowMemory:** Solo N mensajes recientes
-- **ConversationSummaryMemory:** Resume conversaciones largas
+**Estrategias de memoria:**
+- **Buffer completo:** mantiene todo el historial
+- **Ventana de N mensajes:** solo los más recientes
+- **Resumen:** condensa las conversaciones largas
+
+El notebook las implementa con `RunnableWithMessageHistory`; las clases
+`Conversation*Memory` quedaron deprecadas en LangChain v1.
 
 **Cuándo usar cada tipo:**
 - Buffer: Conversaciones cortas e importantes
@@ -179,7 +182,7 @@ for chunk in llm.stream([HumanMessage(content=prompt)]):
 
 **Recursos adicionales:**
 - [Documentación OpenAI API](https://platform.openai.com/docs)
-- [Documentación de Groq](https://console.groq.com/docs/models)
+- [Documentación de Mistral](https://docs.mistral.ai/getting-started/models/models_overview/)
 - [LangChain Documentation](https://python.langchain.com/docs/)
 - [Transformer Architecture Paper](https://arxiv.org/abs/1706.03762)
 

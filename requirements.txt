@@ -17,7 +17,6 @@ langchain-classic>=1.0          # rutas legacy: .schema .memory .chains .evaluat
 
 # --- Proveedores gratuitos -------------------------------------------
 langchain-groq>=1.1             # chat (Groq, compatible OpenAI)
-langchain-google-genai>=4.0     # embeddings (Gemini)
 
 # --- RAG --------------------------------------------------------------
 faiss-cpu>=1.9

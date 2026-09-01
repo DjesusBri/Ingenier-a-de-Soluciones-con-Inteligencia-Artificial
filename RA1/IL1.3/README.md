@@ -27,9 +27,8 @@ Al finalizar este módulo, serás capaz de:
 
 ## Instrucciones
 
-Para comenzar, abre y ejecuta los cuadernos en el orden listado. Asegúrate de tener las variables de entorno (`LLM_BASE_URL`, `LLM_API_KEY` y `GOOGLE_API_KEY`) configuradas como se describe en el `README.md` principal del repositorio.
+Para comenzar, abre y ejecuta los cuadernos en el orden listado. Asegúrate de tener las variables de entorno (`LLM_BASE_URL` y `LLM_API_KEY`) configuradas como se describe en el `README.md` principal del repositorio.
 
-> **Nota sobre embeddings:** el chat de estos cuadernos usa Mistral, pero el pipeline
-> de RAG está validado con los embeddings de Gemini. Por eso los notebooks 3 y 4 generan los vectores con
-> **Gemini** (`gemini-embedding-001`) vía Google AI Studio, que es gratis y solo
-> requiere la cuenta de Google que ya usas para Colab. De ahí viene `GOOGLE_API_KEY`.
+> **Nota sobre embeddings:** el chat y los embeddings usan el mismo proveedor.
+> Mistral expone `/v1/embeddings`, así que los notebooks 3 y 4 generan los vectores
+> con `mistral-embed` usando la misma `LLM_API_KEY`. No hace falta una segunda key.

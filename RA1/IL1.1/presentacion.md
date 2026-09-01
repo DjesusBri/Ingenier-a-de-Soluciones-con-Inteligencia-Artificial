@@ -34,7 +34,6 @@
 ```bash
 LLM_BASE_URL="https://api.mistral.ai/v1"
 LLM_API_KEY="tu_key_de_mistral"   # gratis en console.mistral.ai/api-keys
-GOOGLE_API_KEY="AIza..."       # gratis en aistudio.google.com/apikey (solo embeddings)
 ```
 
 **Dependencias:**

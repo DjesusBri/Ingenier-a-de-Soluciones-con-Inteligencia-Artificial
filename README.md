@@ -47,7 +47,7 @@ Cada subcarpeta IL contiene ejemplos en Python (`.py`), notebooks (`.ipynb`) o g
 ## 🚦 ¿Cómo usar este repositorio?
 
 1. **Haz un fork** del repositorio a tu cuenta de GitHub.
-2. **Consigue tus dos API keys** y cárgalas en los Secrets de Colab (ver [Puesta en marcha](#-puesta-en-marcha-google-colab--recomendado)).
+2. **Consigue tu API key de Mistral** y cárgala en los Secrets de Colab (ver [Puesta en marcha](#-puesta-en-marcha-google-colab--recomendado)).
 3. **Abre los notebooks en Colab** con el badge que trae cada uno y ejecútalos en orden.
 4. **Lee los README.md** de cada carpeta para entender el objetivo de cada módulo.
 5. **Consulta los archivos `.md`** para teoría, mejores prácticas y requisitos de cada entrega.
@@ -58,19 +58,15 @@ Cada subcarpeta IL contiene ejemplos en Python (`.py`), notebooks (`.ipynb`) o g
 
 No necesitas instalar nada en tu computador. **Todo corre en Colab con servicios gratuitos que no piden tarjeta de crédito.**
 
-### Paso 1 — Consigue tus dos API keys
+### Paso 1 — Consigue tu API key
 
 | Key | Para qué | Dónde obtenerla |
 |---|---|---|
-| `LLM_API_KEY` | Chat (todos los módulos) | [console.mistral.ai/api-keys](https://console.mistral.ai/api-keys) |
-| `GOOGLE_API_KEY` | Embeddings (RA1/IL1.3 y IL1.4) | [aistudio.google.com/apikey](https://aistudio.google.com/apikey) |
+| `LLM_API_KEY` | Todo el curso: chat y embeddings | [console.mistral.ai/api-keys](https://console.mistral.ai/api-keys) |
 
-Para la de Google basta la misma cuenta con la que entras a Colab.
+Una sola key para todo. Mistral cubre el chat (`mistral-small-latest`) y también los
+embeddings del módulo de RAG (`mistral-embed`), así que no necesitas otro proveedor.
 
-> **¿Por qué dos proveedores?** Mistral se encarga del chat, pero la parte de RAG
-> vectorial usa Gemini (`gemini-embedding-001`) para los embeddings. Son servicios
-> distintos y ningún proveedor gratuito cubre bien los dos.
->
 > La key de Mistral pide verificar un número de teléfono una sola vez.
 
 ### Paso 2 — Haz un fork de este repositorio
@@ -96,7 +92,6 @@ es el nombre que buscan los notebooks:
 | Name (exacto) | Value | ¿Obligatorio? | Se usa en |
 |---|---|---|---|
 | `LLM_API_KEY` | Tu key de Mistral | **Sí** | Todos los notebooks |
-| `GOOGLE_API_KEY` | Tu key de Google AI Studio | **Sí, desde IL1.3** | RA1/IL1.3 y RA1/IL1.4 (embeddings) |
 | `LANGSMITH_API_KEY` | Tu key de LangSmith | No, opcional | RA1/IL1.4 (`2-langsmith-evaluation.ipynb`) |
 
 > ⚠️ **Activa el interruptor "Notebook access" en cada secreto.** Si el secreto existe pero
@@ -122,8 +117,8 @@ agregando estos secretos adicionales. Si no los defines, todo sigue funcionando 
 | `LLM_MODEL_SMALL` | `openai/gpt-oss-20b` |
 
 Y en `LLM_API_KEY` pon tu key de Groq ([console.groq.com/keys](https://console.groq.com/keys),
-gratuita). Los embeddings siguen usando Gemini en cualquier caso, así que `GOOGLE_API_KEY`
-no cambia.
+gratuita). Ojo: Groq **no** ofrece embeddings, así que el módulo de RAG (RA1/IL1.3)
+seguiría necesitando una key de Mistral.
 
 > ⚠️ **Sobre Groq:** retiró los modelos Llama de su catálogo gratuito. Lo que queda son
 > modelos de razonamiento, que gastan parte del presupuesto de `max_tokens` en razonamiento
@@ -145,9 +140,8 @@ Las cuotas son **por cuenta**, así que cada quien tiene la suya. Los valores re
 
 | Servicio | Modelo | Límite diario | Límite por minuto |
 |---|---|---|---|
-| Mistral | `mistral-small-latest` | plan gratuito, sin coste | 100.000 tokens · 100 peticiones |
+| Mistral | `mistral-small-latest` y `mistral-embed` | plan gratuito, sin coste | 100.000 tokens · 100 peticiones |
 | Groq | `openai/gpt-oss-120b` | 100.000 tokens · 1.000 peticiones | 12.000 tokens · 30 peticiones |
-| Gemini | `gemini-embedding-001` | 1.000 peticiones | 100 peticiones |
 
 El límite de Mistral es **por minuto, no por día**: si te aparece un error `429`, no está roto
 tu código ni te quedaste sin cuota para la clase. Espera unos segundos y vuelve a ejecutar la
@@ -210,8 +204,7 @@ except Exception as e:
 pip install -r requirements.txt
 ```
 
-Luego copia `.env.example` a `.env` y completa `LLM_API_KEY` y `GOOGLE_API_KEY`
-(mismas keys del Paso 1). Los notebooks detectan si están en Colab o en local y
+Luego copia `.env.example` a `.env` y completa `LLM_API_KEY` (la misma key del Paso 1). Los notebooks detectan si están en Colab o en local y
 leen las credenciales del lugar correcto sin que cambies nada.
 
 `LLM_BASE_URL` ya viene configurado apuntando a Mistral, que expone una API compatible con OpenAI.

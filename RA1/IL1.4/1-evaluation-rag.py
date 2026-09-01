@@ -13,7 +13,7 @@ import plotly.express as px
 import plotly.graph_objects as go
 
 # LangChain imports
-from langchain_google_genai import GoogleGenerativeAIEmbeddings
+from langchain_openai import OpenAIEmbeddings
 # LangChain v1: langchain_core.messages / langchain_core.documents
 from langchain_classic.schema import Document
 
@@ -25,21 +25,15 @@ except ImportError:
     st.warning("⚠️ python-dotenv no está instalado. Instálalo con: pip install python-dotenv")
 
 # --- Configuración de proveedores ---
-# Chat  -> Groq   (API compatible con OpenAI)
-# Embed -> Gemini (Groq no expone endpoint de embeddings)
+# Chat y embeddings: ambos en Mistral, con la misma key.
 llm_api_key = os.getenv("LLM_API_KEY")
 llm_base_url = os.getenv("LLM_BASE_URL", "https://api.mistral.ai/v1")
-google_api_key = os.getenv("GOOGLE_API_KEY")
 
 if not llm_api_key:
     st.error("❌ Falta LLM_API_KEY (key de Groq). Revisa tu archivo .env.")
     st.info("💡 Consíguela gratis en https://console.mistral.ai/api-keys")
     st.stop()
 
-if not google_api_key:
-    st.error("❌ Falta GOOGLE_API_KEY (key de Gemini, usada para los embeddings).")
-    st.info("💡 Consíguela gratis en https://aistudio.google.com/apikey")
-    st.stop()
 
 st.set_page_config(page_title="RAG Evaluation", page_icon="📊", layout="wide")
 
@@ -51,12 +45,13 @@ def initialize_client():
     )
 
 def initialize_embeddings():
-    """Modelo de embeddings de Gemini (Google AI Studio)."""
+    """Modelo de embeddings de Mistral (misma key que el chat)."""
     try:
-        return GoogleGenerativeAIEmbeddings(
-            model="gemini-embedding-001",
-            output_dimensionality=768,
-            google_api_key=google_api_key,
+        return OpenAIEmbeddings(
+            base_url=llm_base_url,
+            api_key=llm_api_key,
+            model="mistral-embed",
+            check_embedding_ctx_length=False,
         )
     except Exception as e:
         st.error(f"Error initializing embeddings: {str(e)}")
